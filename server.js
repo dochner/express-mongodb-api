@@ -1,12 +1,27 @@
-const express = require('express');
-const server = express();
+require('dotenv').config
 
-const body_parser = require('body-parser');
+const express = require('express')
+const cors = require('cors')
+const mongoose = require('mongoose')
+const routes = require('./routes')
 
-const port = 5000;
+const PORT = process.env.PORT || 8282
 
-const db = require('./')
+const app = express()
 
-server.listen(port, () => {
-   console.log(`Server listening at ${port}`);
-});
+app.use(cors())
+app.use(routes)
+app.use(express.json())
+
+const uri = 'mongodb+srv://dataUser:Amor2803@cluster0.czrpt.gcp.mongodb.net/data?retryWrites=true&w=majority'
+mongoose.connect(
+    uri,
+    {
+        useNewUrlParser: true,
+        useCreateIndex: true,
+        useUnifiedTopology: true
+    })
+
+app.listen(PORT, () => {
+    console.log(`Server listening on http://locahost:${PORT}`)
+})
